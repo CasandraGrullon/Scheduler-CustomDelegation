@@ -61,7 +61,7 @@ class ScheduleListController: UIViewController {
         print("could not create new event")
         return 
     }
-        
+        //1. when user wants to edit! -- create an if statement with an instance of the eventState
     if createEventController.eventState == .existingEvent {
       let index = events.firstIndex { $0.identifier == newEvent.identifier }
       
@@ -75,9 +75,11 @@ class ScheduleListController: UIViewController {
   }
   
   private func update(oldEvent: Event, with newEvent: Event) {
-    // update item in documents directory
+    // 2. when user wants to edit! -- update item in documents directory
+    dataPersistence.updateEvent(oldEvent, with: newEvent)
+    // 3. when user wants to edit! -- call load items to update events array: 1. retrieves objects from documents directory 2. appends to events array 3. reloads the table view
+    loadItems()
     
-    // call load items to update events array
   }
   
   private func createNewEvent(event: Event) {

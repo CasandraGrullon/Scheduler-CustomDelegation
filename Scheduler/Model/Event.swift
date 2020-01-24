@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Equatable ==> comparable for value equality... able to search for elements through their indexes
 struct Event: Codable & Equatable {
   let identifier = UUID().uuidString
   var date: Date

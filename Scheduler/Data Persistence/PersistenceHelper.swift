@@ -70,7 +70,27 @@ class DataPersistence {
     try? saveItemsToDocumentsDirectory()
   }
   
-  // Update
+  // Update functions
+    @discardableResult // silences the warning if the return value is not used by the caller
+    public func updateEvent(_ oldItem: Event, with newItem: Event) -> Bool {
+        if let index = items.firstIndex(of: oldItem) {
+            let result = update(newItem, at: index)
+            return result
+        }
+        return false
+    }
+    
+    @discardableResult
+    public func update(_ item: Event, at index: Int) -> Bool {
+        items[index] = item
+        // save items to documents directory
+        do {
+            try saveItemsToDocumentsDirectory()
+            return true
+        } catch {
+            return false
+        }
+    }
   
   // Delete
   public func deleteItem(at index: Int) throws {
