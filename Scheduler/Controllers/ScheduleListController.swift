@@ -88,7 +88,7 @@ class ScheduleListController: UIViewController {
   
   private func update(oldEvent: Event, with newEvent: Event) {
     // 2. when user wants to edit! -- update item in documents directory
-    dataPersistence.updateEvent(oldEvent, with: newEvent)
+    dataPersistence.update(oldEvent, with: newEvent)
     // 3. when user wants to edit! -- call load items to update events array: 1. retrieves objects from documents directory 2. appends to events array 3. reloads the table view
     loadItems()
     
