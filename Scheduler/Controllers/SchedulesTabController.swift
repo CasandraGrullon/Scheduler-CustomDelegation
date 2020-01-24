@@ -23,6 +23,7 @@ class SchedulesTabController: UITabBarController {
         }
         //3a. set data persistence property
         scheulesListController.dataPersistence = dataPersistence
+        
         return navController
     }()
     //b
@@ -35,6 +36,8 @@ class SchedulesTabController: UITabBarController {
         }
         //3b. set data persistence property
         completedController.dataPersistence = dataPersistence
+        //Custom Delegation: 4. set delegate object
+        completedController.dataPersistence.delegate = completedController
         return navController
     }()
     
