@@ -15,7 +15,7 @@ class ScheduleListController: UIViewController {
   // data - an array of events
   private var events = [Event]()
   
-    public let dataPersistence = DataPersistence<Event>(filename: "schedules.plist")
+    public var dataPersistence: DataPersistence<Event>!
   //public let dataPersistence = DataPersistence(filename: "schedules.plist")
   
   private var isEditingTableView = false {
