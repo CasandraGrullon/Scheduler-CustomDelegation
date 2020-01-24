@@ -16,12 +16,15 @@ public enum DataPersistenceError: Error {
   case noContentsAtPath(String)
 }
 
+typealias Writeable = Codable & Equatable
 
-class DataPersistence {
+// <T: Codable> == type constrained : can only work with Codable & Equatable types
+// T is a placeholder for the passed in type
+class DataPersistence<T: Writeable> {
   
   private let filename: String
   
-  private var items: [Event]
+  private var items: [T]
       
   public init(filename: String) {
     self.filename = filename
@@ -39,7 +42,7 @@ class DataPersistence {
   }
   
   // Create
-  public func createItem(_ item: Event) throws {
+  public func createItem(_ item: T) throws {
     _ = try? loadItems()
     items.append(item)
     do {
@@ -50,12 +53,12 @@ class DataPersistence {
   }
   
   // Read
-  public func loadItems() throws -> [Event] {
+  public func loadItems() throws -> [T] {
     let path = FileManager.getPath(with: filename, for: .documentsDirectory).path
      if FileManager.default.fileExists(atPath: path) {
        if let data = FileManager.default.contents(atPath: path) {
          do {
-           items = try PropertyListDecoder().decode([Event].self, from: data)
+           items = try PropertyListDecoder().decode([T].self, from: data)
          } catch {
           throw DataPersistenceError.propertyListDecodingError(error)
          }
@@ -65,14 +68,14 @@ class DataPersistence {
   }
   
   // for re-ordering, and keeping date in sync
-  public func synchronize(_ items: [Event]) {
+  public func synchronize(_ items: [T]) {
     self.items = items
     try? saveItemsToDocumentsDirectory()
   }
   
   // Update functions
     @discardableResult // silences the warning if the return value is not used by the caller
-    public func updateEvent(_ oldItem: Event, with newItem: Event) -> Bool {
+    public func updateEvent(_ oldItem: T, with newItem: T) -> Bool {
         if let index = items.firstIndex(of: oldItem) {
             let result = update(newItem, at: index)
             return result
@@ -81,7 +84,7 @@ class DataPersistence {
     }
     
     @discardableResult
-    public func update(_ item: Event, at index: Int) -> Bool {
+    public func update(_ item: T, at index: Int) -> Bool {
         items[index] = item
         // save items to documents directory
         do {
@@ -102,7 +105,7 @@ class DataPersistence {
     }
   }
   
-  public func hasItemBeenSaved(_ item: Event) -> Bool {
+  public func hasItemBeenSaved(_ item: T) -> Bool {
     guard let items = try? loadItems() else {
       return false
     }

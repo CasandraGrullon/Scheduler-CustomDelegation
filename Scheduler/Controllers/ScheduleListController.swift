@@ -15,7 +15,8 @@ class ScheduleListController: UIViewController {
   // data - an array of events
   private var events = [Event]()
   
-  public let dataPersistence = DataPersistence(filename: "schedules.plist")
+    public let dataPersistence = DataPersistence<Event>(filename: "schedules.plist")
+  //public let dataPersistence = DataPersistence(filename: "schedules.plist")
   
   private var isEditingTableView = false {
     didSet { // property observer
@@ -44,6 +45,16 @@ class ScheduleListController: UIViewController {
     loadItems()
   }
   
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        //call loadItems
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        //TODO: call save function to persist data
+    }
+    
   private func loadItems() {
     do {
       events = try dataPersistence.loadItems()
